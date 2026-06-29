@@ -1,102 +1,101 @@
 # Sukasi-kun (Environment Watermark Overlay) Chrome Extension
 
-本番環境（Production）と開発・検証環境（Development/Staging）を見分けるために、ドメインごとにカスタマイズ可能なウォーターマーク（透かしバッジ）を画面上にオーバーレイ表示する Google Chrome 拡張機能です。
+A Google Chrome extension that displays a customizable watermark (overlay badge) on the screen based on the current domain to help developers visually distinguish between Production, Staging, and Development environments.
 
-## 主な機能
+## Key Features
 
-1. **ドメイン指定・管理機能**
-   - 部分一致によるドメインマッチング（例: `localhost` と指定すると `localhost:3000` や `localhost:8080` にもマッチ）。
-   - 特定のドメインに対する複数のルールを簡単に登録・削除できます。
+1. **Domain Specification & Management**
+   - Substring-based domain matching (e.g., specifying `localhost` will match `localhost:3000` or `localhost:8080`).
+   - Easily register or delete multiple rules for specific domains.
 
-2. **リアルタイムなウォーターマーク表示**
-   - 設定したドメインを表示した際、指定した四隅（左上、右上、左下、右下）にウォーターマークを表示。
-   - Shadow DOM を使用して注入するため、対象サイトの CSS による崩れや干渉を受けません。
-   - `pointer-events: none` を指定しているため、ウォーターマークの下にあるボタン等のクリックやテキスト選択を一切妨げません。
+2. **Real-time Watermark Overlay**
+   - Displays a watermark badge at any of the four corners (top-left, top-right, bottom-left, bottom-right) when visiting configured domains.
+   - Uses **Shadow DOM** for DOM injection to ensure that host website styles (CSS) do not override or break the watermark's layout.
+   - Styled with `pointer-events: none` and `user-select: none`, ensuring it **does not block clicks, scrolling, or text selection** of underlying elements.
 
-3. **高度なカスタマイズ性（ドメイン単位）**
-   - 表示テキスト（例: `STAGING`, `LOCAL-DEV`）
-   - 文字サイズ (10px〜60px)
-   - 不透明度 (10%〜100%)
-   - 文字色（カラーピッカー）
-   - 背景色（カラーピッカー）
-   - 表示位置（左上、右上、左下、右下）
-   - 拡張機能のポップアップUI上で**リアルタイムにプレビュー**しながら調整可能。
-   - ポップアップで設定を変更すると、現在開いているタブのウォーターマークが**リロード不要で瞬時に切り替わり**ます。
+3. **High Customizability (Per Domain)**
+   - Display text (e.g., `STAGING`, `LOCAL-DEV`)
+   - Font size (10px to 60px)
+   - Opacity (10% to 100%)
+   - Text color (Color picker)
+   - Background color (Color picker)
+   - Badge position (Top-Left, Top-Right, Bottom-Left, Bottom-Right)
+   - **Real-time Live Preview** allows you to see the styled watermark directly in the extension popup before saving.
+   - Changes apply **instantly to active tabs without requiring a page reload**.
 
 ---
 
-## ディレクトリ構成
+## Directory Structure
 
 ```
 sukasi-kun/
-├── manifest.json       # 拡張機能の構成ファイル (Manifest V3)
-├── popup.html          # 設定変更用ポップアップ UI
-├── popup.css           # ポップアップ UI 用スタイル (モダンなダークテーマ・Glassmorphism)
-├── popup.js            # ポップアップ UI の状態管理・ストレージ保存ロジック
-├── content.js          # ウェブページへのウォーターマーク注入スクリプト (Shadow DOM)
-├── icons/              # 拡張機能アイコン
+├── manifest.json       # Extension configuration file (Manifest V3)
+├── popup.html          # Configuration Popup UI
+├── popup.css           # Popup UI Styles (modern dark mode & glassmorphism)
+├── popup.js            # Popup UI state management & storage handling
+├── content.js          # Webpage watermark injection script (Shadow DOM)
+├── icons/              # Extension icons
 │   ├── icon-16.png
 │   ├── icon-48.png
 │   └── icon-128.png
-└── README.md           # 本説明書
+└── README.md           # This documentation
 ```
 
 ---
 
-## インストール方法（Chrome）
+## Installation (Chrome)
 
-1. Google Chrome を起動し、アドレスバーに `chrome://extensions/` と入力して移動します。
-2. 画面右上にある **「デベロッパー モード」** のトグルスイッチを **オン** にします。
-3. 画面左上に表示される **「パッケージ化されていない拡張機能を読み込む」** ボタンをクリックします。
-4. 本プロジェクトのディレクトリ（`sukasi-kun` フォルダ）を選択して読み込みます。
-5. 拡張機能一覧に **「Sukasi-kun (ウォーターマーク表示)」** が追加されます。ツールバーにピン留めしておくと便利です。
+1. Open Google Chrome and navigate to `chrome://extensions/`.
+2. Toggle the **"Developer mode"** switch in the top-right corner to **ON**.
+3. Click the **"Load unpacked"** button in the top-left corner.
+4. Select this project's directory (`sukasi-kun` folder).
+5. The extension **"Sukasi-kun (ウォーターマーク表示)"** will be added. You can pin it to the toolbar for quick access.
 
 ---
 
-## 動作テスト方法
+## Testing the Extension
 
-1. ローカルで簡易ウェブサーバーを起動します（例として Python を使用する場合）:
+1. Start a simple local web server (e.g., using Python):
    ```bash
    python3 -m http.server 8000
    ```
-2. ブラウザで `http://localhost:8000` にアクセスします。
-3. 拡張機能のポップアップアイコンをクリックして設定を開きます。
-4. 以下の設定を入力してみます：
-   - **対象ドメイン**: `localhost`
-   - **表示テキスト**: `LOCAL-DEV`
-   - **文字サイズ**: `20px`
-   - **不透明度**: `70%`
-   - **文字色**: `#ffffff`
-   - **背景色**: `#ff3366`
-   - **表示位置**: `右上`
-5. **「ルールを保存」** ボタンをクリックします。
-6. 開いている `http://localhost:8000` の右上に、設定した通りのウォーターマークが瞬時に表示されることを確認できます。
-7. ポップアップからルールを削除すると、ウォーターマークも瞬時に消去されます。
+2. Navigate to `http://localhost:8000` in Chrome.
+3. Click the extension popup icon in the toolbar.
+4. Input the following settings:
+   - **Domain**: `localhost`
+   - **Text**: `LOCAL-DEV`
+   - **Font Size**: `20px`
+   - **Opacity**: `70%`
+   - **Color**: `#ffffff`
+   - **Background**: `#ff3366`
+   - **Position**: `Top-Right`
+5. Click **"Save Rule"** (ルールを保存).
+6. Verify that the configured watermark badge appears instantly at the top-right corner of `http://localhost:8000`.
+7. Try deleting the rule from the popup; the watermark will disappear instantly.
 
 ---
 
-## GitHub での配布方法（GitHub Releases）
+## Distribution via GitHub Releases
 
-本拡張機能を GitHub で配布する場合は、以下の手順でパッケージ（zipファイル）を公開することをお勧めします。
+To distribute this extension on GitHub, it is recommended to publish it as a ZIP package using **GitHub Releases**.
 
-### 1. 配布用 ZIP アーカイブの作成
-以下のワンライナーコマンドを実行すると、不要な Git 関連ファイルや設定ファイルを除外した、配布専用の `sukasi-kun.zip` が生成されます：
+### 1. Build the Release ZIP File
+Run the following one-liner in your terminal to generate a clean `sukasi-kun.zip` containing only the extension files, excluding Git files and build plans:
 ```bash
 python3 -c "import zipfile, os; zipf = zipfile.ZipFile('sukasi-kun.zip', 'w', zipfile.ZIP_DEFLATED); [zipf.write(f, f) for f in ['manifest.json', 'popup.html', 'popup.css', 'popup.js', 'content.js', 'README.md'] if os.path.exists(f)]; [zipf.write(os.path.join('icons', f), os.path.join('icons', f)) for f in os.listdir('icons') if os.path.exists('icons')]"
 ```
 
-### 2. リポジトリを GitHub にプッシュする
+### 2. Push Your Repository to GitHub
 ```bash
 git branch -M main
-git remote add origin https://github.com/ユーザー名/sukasi-kun.git
+git remote add origin https://github.com/your-username/sukasi-kun.git
 git push -u origin main
 ```
 
-### 3. GitHub Releases で公開する
-1. GitHub のリポジトリページを開き、右側メニューの **「Releases」** から **「Create a new release」** をクリックします。
-2. タグ名（例: `v1.0.0`）とタイトルを指定します。
-3. ページ下部のバイナリアタッチ欄に、作成した `sukasi-kun.zip` をドラッグ＆ドロップしてアップロードします。
-4. **「Publish release」** ボタンを押して公開します。
+### 3. Publish on GitHub Releases
+1. Navigate to your repository on GitHub, then click **"Releases"** -> **"Create a new release"** in the right sidebar.
+2. Select or create a version tag (e.g., `v1.0.0`) and enter a title.
+3. Drag and drop the generated `sukasi-kun.zip` into the binary attachment area.
+4. Click **"Publish release"**.
 
-利用者は公開された Release ページから `sukasi-kun.zip` をダウンロード・解凍し、Chrome の「パッケージ化されていない拡張機能を読み込む」から簡単にインストールできます。
-
+Users can download the `sukasi-kun.zip` from your Release page, extract it, and install it in Chrome via the "Load unpacked" button.
