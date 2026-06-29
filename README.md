@@ -45,11 +45,14 @@ sukasi-kun/
 
 ## Installation (Chrome)
 
-1. Open Google Chrome and navigate to `chrome://extensions/`.
-2. Toggle the **"Developer mode"** switch in the top-right corner to **ON**.
-3. Click the **"Load unpacked"** button in the top-left corner.
-4. Select this project's directory (`sukasi-kun` folder).
-5. The extension **"Sukasi-kun (ウォーターマーク表示)"** will be added. You can pin it to the toolbar for quick access.
+1. Go to the [Releases](https://github.com/your-username/sukasi-kun/releases) page of this repository and download the latest `sukasi-kun.zip`.
+2. Extract the downloaded ZIP file to a directory of your choice.
+3. Open Google Chrome and navigate to `chrome://extensions/`.
+4. Toggle the **"Developer mode"** switch in the top-right corner to **ON**.
+5. Click the **"Load unpacked"** button in the top-left corner.
+6. Select the extracted folder (which contains `manifest.json` and other files).
+7. The extension **"Sukasi-kun (ウォーターマーク表示)"** will be added. You can pin it to the toolbar for quick access.
+
 
 ---
 
