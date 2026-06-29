@@ -1,15 +1,15 @@
 (function() {
   const HOST_ELEMENT_ID = 'sukasi-kun-watermark-host';
 
-  // Apply watermark based on current hostname and configurations
+  // Apply watermark based on current host (domain + port) and configurations
   function applyWatermark(rules) {
-    const hostname = window.location.hostname;
-    if (!hostname) return;
+    const host = window.location.host;
+    if (!host) return;
 
-    // Filter rules that match the current hostname
+    // Filter rules that match the current host
     const matches = rules.filter(rule => {
       const target = rule.domain.toLowerCase().trim();
-      return hostname.includes(target);
+      return host.includes(target);
     });
 
     if (matches.length === 0) return;
