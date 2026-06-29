@@ -72,3 +72,31 @@ sukasi-kun/
 5. **「ルールを保存」** ボタンをクリックします。
 6. 開いている `http://localhost:8000` の右上に、設定した通りのウォーターマークが瞬時に表示されることを確認できます。
 7. ポップアップからルールを削除すると、ウォーターマークも瞬時に消去されます。
+
+---
+
+## GitHub での配布方法（GitHub Releases）
+
+本拡張機能を GitHub で配布する場合は、以下の手順でパッケージ（zipファイル）を公開することをお勧めします。
+
+### 1. 配布用 ZIP アーカイブの作成
+以下のワンライナーコマンドを実行すると、不要な Git 関連ファイルや設定ファイルを除外した、配布専用の `sukasi-kun.zip` が生成されます：
+```bash
+python3 -c "import zipfile, os; zipf = zipfile.ZipFile('sukasi-kun.zip', 'w', zipfile.ZIP_DEFLATED); [zipf.write(f, f) for f in ['manifest.json', 'popup.html', 'popup.css', 'popup.js', 'content.js', 'README.md'] if os.path.exists(f)]; [zipf.write(os.path.join('icons', f), os.path.join('icons', f)) for f in os.listdir('icons') if os.path.exists('icons')]"
+```
+
+### 2. リポジトリを GitHub にプッシュする
+```bash
+git branch -M main
+git remote add origin https://github.com/ユーザー名/sukasi-kun.git
+git push -u origin main
+```
+
+### 3. GitHub Releases で公開する
+1. GitHub のリポジトリページを開き、右側メニューの **「Releases」** から **「Create a new release」** をクリックします。
+2. タグ名（例: `v1.0.0`）とタイトルを指定します。
+3. ページ下部のバイナリアタッチ欄に、作成した `sukasi-kun.zip` をドラッグ＆ドロップしてアップロードします。
+4. **「Publish release」** ボタンを押して公開します。
+
+利用者は公開された Release ページから `sukasi-kun.zip` をダウンロード・解凍し、Chrome の「パッケージ化されていない拡張機能を読み込む」から簡単にインストールできます。
+
